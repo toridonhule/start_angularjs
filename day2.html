@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Learning AngularJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+
+<body>
+<div ng-app="myApp" ng-controller="customersCtrl" style="margin: 20px; width: 70%">
+    <form name="myForm" class="form-inline">
+        <div class="input-group">
+
+            <input type="text" class="form-control col-lg-5" placeholder="Search for name" ng-model="search.Name">
+            <span class="input-group-btn" ng-click="search.Name = ''" ng-show="search.Name">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+
+            <input type="text" class="form-control" placeholder="Search for city" ng-model="search.City">
+            <span class="input-group-btn" ng-click="search.City = ''" ng-show="search.City">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+
+            <select class="form-control" ng-model="search.Country" ng-options="item for item in groupCountry">
+            </select>
+            <span class="input-group-btn" ng-click="search.Country = ''" ng-show="search.Country">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </span>
+        </div>
+
+        <hr>
+
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Name</td>
+                    <td>City</td>
+                    <td>Country</td>
+                    <td>Age</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="x in names | filter:search">
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ x.Name }}</td>
+                    <td>{{ x.City }}</td>
+                    <td>{{ x.Country }}</td>
+                    <td><input type="number" ng-model="x.Age" class="form-control"></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+</div>
+<script>
+    var i,j ;
+    var app = angular.module('myApp', []);
+    app.controller('customersCtrl', function($scope, $http) {
+        $scope.groupCountry = ['Ger','Mex'];
+        $http.get("http://www.w3schools.com/angular/customers_mysql.php")
+                .then(function (response) {
+                    $scope.names = response.data.records;
+                    for( i=0 ; i < $scope.names.length ; i++){
+                        $scope.names[i].Age = 20;
+                        if ($scope.groupCountry.indexOf($scope.names[i].Country) == -1){
+                            $scope.groupCountry.push($scope.names[i].Country);
+                        }
+                    }
+                    console.log($scope.groupCountry);
+                });
+    });
+</script>
+</body>
+</html>

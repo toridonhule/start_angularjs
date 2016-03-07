@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Torido Test AngulaJs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script>
+        var app = angular.module('myApp',[]);
+        app.run(function($rootScope){
+            $rootScope.rootAge = 21;
+        });
+        app.controller('myCtrl', function($scope, $rootScope){
+            $scope.name = 'Ariana Nhu';
+            $scope.year = 2016 - $rootScope.rootAge;
+            $scope.gender = 'female';
+            $scope.years = [1990,1991,1992,1993,1994,1995,1996,1997,1998,1999];
+            $scope.message = 'Show';
+        });
+    </script>
+</head>
+<body>
+<div ng-app="myApp" style="text-align: center">
+    <div ng-controller="myCtrl">
+        <hr>
+        <form name="myForm" method="post" class="form-inline">
+            <label>My Name:
+                <input type="text" ng-model="name" placeholder="enter Name" class="form-control">
+            </label>
+            <br>
+            <label>Born year:
+                <select class="form-control" ng-model="year" ng-options="x for x in years">
+                </select>
+            </label>
+            <br>
+            <label>Gender:
+                <input type="radio" ng-model="gender" name="gender" value="female">Female
+                <input type="radio" ng-model="gender" name="gender" value="male">Male
+            </label>
+            <br>
+            <button class="btn btn-default" ng-model="myVar" ng-click="myVar = !myVar" ng-init="myVar=true">{{myVar?'Hide Message':'Show Message'}}</button>
+        </form>
+        <h2 ng-show="myVar">Hello! My name is {{ name }} and I was born in {{ year }}. I'm {{gender}}</h2>
+    </div>
+</div>
+</body>
+</html>
